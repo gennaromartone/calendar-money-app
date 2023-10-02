@@ -14,8 +14,10 @@ export default function AuthForm({ type }: { type: "login" | "register" }) {
   return (
     <form
       onSubmit={(e) => {
+        console.log('COSA',type)
         e.preventDefault();
         setLoading(true);
+        
         if (type === "login") {
           signIn("credentials", {
             redirect: false,
@@ -24,6 +26,7 @@ export default function AuthForm({ type }: { type: "login" | "register" }) {
             // @ts-ignore
           }).then(({ error }) => {
             if (error) {
+              console.log('Error: ',error)
               setLoading(false);
               toast.error(error);
             } else {
@@ -32,6 +35,7 @@ export default function AuthForm({ type }: { type: "login" | "register" }) {
             }
           });
         } else {
+          console.log('PROVO')
           fetch("/api/auth/register", {
             method: "POST",
             headers: {
@@ -46,7 +50,7 @@ export default function AuthForm({ type }: { type: "login" | "register" }) {
             if (res.status === 200) {
               toast.success("Account created! Redirecting to login...");
               setTimeout(() => {
-                router.push("/login");
+                router.push("/");
               }, 2000);
             } else {
               const { error } = await res.json();
